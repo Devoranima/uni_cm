@@ -12,14 +12,15 @@ def runge_kutta_2(f, y0, t0, t_end, h):
     :param h: Шаг интегрирования
     :return: Массив времени t и массив решений y
     """
-    t = np.arange(t0, t_end + h, h)
-    y = np.zeros((len(t), len(y0)))
+    n = int((t_end - t0)/h)+1
+    t = np.linspace(t0, t_end, n)
+    y = np.zeros((n, len(y0)))
     y[0] = y0
 
-    for i in range(1, len(t)):
-        k1 = f(t[i - 1], y[i - 1])
-        k2 = f(t[i - 1] + h, y[i - 1] + h * k1)
-        y[i] = y[i - 1] + h * (k1 + k2) / 2
+    for i in range(n-1):
+        k1 = f(t[i], y[i])
+        k2 = f(t[i] + h, y[i] + h * k1)
+        y[i+1] = y[i] + h * (k1 + k2) / 2
 
     return t, y
 
@@ -32,8 +33,8 @@ def test_system(t, y):
     :param y: Вектор функции [y1, y2]
     :return: Производные [dy1/dt, dy2/dt]
     """
-    dy1_dt = y[0] / (2 + 2 * t) - 2 * y[1]
-    dy2_dt = y[1] / (2 + 2 * t) + 2 * y[0]
+    dy1_dt = y[0] / (2 + 2 * t) - 2*t * y[1]
+    dy2_dt = y[1] / (2 + 2 * t) + 2*t * y[0]
     return np.array([dy1_dt, dy2_dt])
 
 # Точное решение тестовой задачи
@@ -65,8 +66,8 @@ if __name__ == "__main__":
 
     plt.figure(figsize=(10, 6))
 
-    plt.plot(t, y_numeric[:, 0], 'o-', label="Численное y1")
-    plt.plot(t, y_numeric[:, 1], 'o-', label="Численное y2")
+    plt.scatter(t, y_numeric[:, 0], c='red', marker='x', label="Численное y1")
+    plt.scatter(t, y_numeric[:, 1], c='green', marker='x', label="Численное y2")
     plt.plot(t, y1_exact, '-', label="Точное y1")
     plt.plot(t, y2_exact, '-', label="Точное y2")
 

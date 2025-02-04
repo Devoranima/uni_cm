@@ -82,23 +82,22 @@ if __name__ == "__main__":
         plt.grid()
         plt.legend()
 
+    plt.figure(
+        "Зависимости r, Z, phi от s для всех начальных условий", figsize=(12, 8))
 
-    plt.figure("Зависимости r, Z, phi от s для всех начальных условий", figsize=(12, 8))
-    
     dep_names = ["r", "Z", "phi"]
-    
+
     for i, (z0, phi0) in enumerate(initial_conditions):
         y = dep[i]
         r, Z, phi = y[:, 0], y[:, 1], y[:, 2]
         for j in range(1, 4):
             y_dep = y[:, j-1]
             plt.subplot(1, 3, j)
-            plt.plot(s_dep[i], y_dep, label=f"{dep_names[j-1]}(s), z0={z0}, phi0={phi0}")
+            plt.plot(s_dep[i], y_dep,
+                     label=f"{dep_names[j-1]}(s), z0={z0}, phi0={phi0}")
             plt.xlabel("s")
-            plt.ylabel(f"{dep_names[j-1]}(s)") 
+            plt.ylabel(f"{dep_names[j-1]}(s)")
             plt.grid()
             plt.legend()
-
-        
 
     plt.show()
